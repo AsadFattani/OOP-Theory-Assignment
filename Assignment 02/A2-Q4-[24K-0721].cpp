@@ -47,6 +47,23 @@ class User {
             }
             return false;
         }
+
+        virtual void performAction(const string& action) {
+            if (action == "display") {
+                display();
+            } else if (action == "access lab") {
+                string labName;
+                cout << "Enter lab name: ";
+                cin >> labName;
+                if (accessLab(labName)) {
+                    cout << "Access granted to lab: " << labName << endl;
+                } else {
+                    cout << "Access denied to lab: " << labName << endl;
+                }
+            } else {
+                cout << "Invalid action for User." << endl;
+            }
+        }
 };
 
 class Student : public User {
@@ -88,6 +105,19 @@ class Student : public User {
                      << (i < assignmentCount - 1 ? ", " : "");
             }
             cout << endl;
+        }
+
+        void performAction(const string& action) override {
+            if (action == "assign assignment") {
+                assignAssignment();
+            } else if (action == "submit assignment") {
+                int index;
+                cout << "Enter assignment index: ";
+                cin >> index;
+                submitAssignment(index - 1);
+            } else {
+                User::performAction(action);
+            }
         }
 };
 
@@ -141,6 +171,24 @@ class TA : public Student {
             cout << endl;
             viewProjects();
         }
+
+        void performAction(const string& action) override {
+            if (action == "assign student") {
+                string studentName;
+                cout << "Enter student name: ";
+                cin >> studentName;
+                assignStudent(studentName);
+            } else if (action == "start project") {
+                string projectName;
+                cout << "Enter project name: ";
+                cin >> projectName;
+                startProject(projectName);
+            } else if (action == "view projects") {
+                viewProjects();
+            } else {
+                Student::performAction(action);
+            }
+        }
 };
 
 class Professor : public User {
@@ -163,38 +211,60 @@ class Professor : public User {
             cout << "Professor Details:" << endl;
             User::display();
         }
+
+        void performAction(const string& action) override {
+            if (action == "assign project to TA") {
+                string projectName;
+                cout << "Enter project name: ";
+                cin >> projectName;
+                TA* ta = nullptr; // Assume TA object is available or passed in some way
+                // Example: ta = someTAObject;
+                if (ta) {
+                    assignProjectToTA(*ta, projectName);
+                } else {
+                    cout << "No TA available to assign the project." << endl;
+                }
+            } else {
+                User::performAction(action);
+            }
+        }
 };
 
+void authenticateAndPerformAction(User* user, const string& action) {
+    user->performAction(action);
+}
+
 int main() {
-    User user("Mark Scout", 101, "mark.scout@lumon.com", "password123");
-    cout << "User Authentication: " << (user.authenticate("password123") ? "Success" : "Failure") << endl;
-    user.display();
+    Student student("Tyson", 101, "tyson@example.com", "password123");
+    TA ta("Bodhi", 102, "bodhi@example.com", "password456");
+    Professor professor("Dwight", 103, "dwight@example.com", "password789");
 
-    cout << endl;
+    cout << "\nTesting Student actions:" << endl;
+    authenticateAndPerformAction(&student, "display");
+    authenticateAndPerformAction(&student, "assign assignment");
+    authenticateAndPerformAction(&student, "submit assignment");
 
-    Student student("Helly R", 102, "helly.r@lumon.com", "studentpass");
-    cout << "Student Authentication: " << (student.authenticate("studentpass") ? "Success" : "Failure") << endl;
-    student.assignAssignment();
-    student.submitAssignment(0);
-    student.display();
+    cout << "\nTesting TA actions:" << endl;
+    authenticateAndPerformAction(&ta, "display");
+    authenticateAndPerformAction(&ta, "assign student");
+    authenticateAndPerformAction(&ta, "start project");
+    authenticateAndPerformAction(&ta, "view projects");
 
-    cout << endl;
+    cout << "\nTesting Professor actions:" << endl;
+    authenticateAndPerformAction(&professor, "display");
+    authenticateAndPerformAction(&professor, "assign project to TA");
 
-    TA ta("Dylan G", 103, "dylan.g@lumon.com", "tapass");
-    cout << "TA Authentication: " << (ta.authenticate("tapass") ? "Success" : "Failure") << endl;
-    ta.assignStudent("Irving B");
-    ta.startProject("AI Research");
-    ta.display();
-
-    cout << endl;
-
-    Professor professor("Harmony Cobel", 104, "harmony.cobel@lumon.com", "profpass");
-    cout << "Professor Authentication: " << (professor.authenticate("profpass") ? "Success" : "Failure") << endl;
-    professor.assignProjectToTA(ta, "Quantum Computing");
-    professor.display();
+    cout << "\nTesting lab access:" << endl;
+    authenticateAndPerformAction(&student, "access lab");
+    authenticateAndPerformAction(&ta, "access lab");
+    authenticateAndPerformAction(&professor, "access lab");
 
     return 0;
 }
+
+
+
+
 
 
 
