@@ -73,7 +73,7 @@ public:
 };
 
 int main() {
-    Student student1("John Doe", 1);
+    Student student1("Ali Adnan", 1);
     student1.registerForTransport();
     student1.payFees();
 

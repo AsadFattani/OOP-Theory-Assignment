@@ -138,7 +138,7 @@ public:
 
 int main() {
     RentalSystem system;
-    system.registerUser("John Doe", 25, "Full", "123-456-7890", 1);
+    system.registerUser("Aamir Adnan", 25, "Full", "123-456-7890", 1);
     system.addVehicle("Toyota Camry", 50.0, "Full");
     system.addVehicle("Honda Civic", 40.0, "Intermediate");
     system.displayVehicles();
