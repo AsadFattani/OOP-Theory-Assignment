@@ -41,7 +41,7 @@ class User {
 
         bool accessLab(const string& labName) {
             for (int i = 0; i < permissionCount; ++i) {
-                if (permissions[i] == labName) {
+                if (permissions[i] == "full lab access") {
                     return true;
                 }
             }
@@ -107,7 +107,7 @@ class Student : public User {
             cout << endl;
         }
 
-        void performAction(const string& action) override {
+        void performAction(const string& action) {
             if (action == "assign assignment") {
                 assignAssignment();
             } else if (action == "submit assignment") {
@@ -172,7 +172,7 @@ class TA : public Student {
             viewProjects();
         }
 
-        void performAction(const string& action) override {
+        void performAction(const string& action) {
             if (action == "assign student") {
                 string studentName;
                 cout << "Enter student name: ";
@@ -212,13 +212,12 @@ class Professor : public User {
             User::display();
         }
 
-        void performAction(const string& action) override {
+        void performAction(const string& action) {
             if (action == "assign project to TA") {
                 string projectName;
                 cout << "Enter project name: ";
                 cin >> projectName;
-                TA* ta = nullptr; // Assume TA object is available or passed in some way
-                // Example: ta = someTAObject;
+                TA* ta = nullptr;
                 if (ta) {
                     assignProjectToTA(*ta, projectName);
                 } else {
