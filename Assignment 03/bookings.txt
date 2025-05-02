@@ -1,0 +1,4 @@
+Molly Hooper,Student,HOLMES-1,8
+Inspector Lestrade,Faculty,WATSON-X,15
+Mrs Hudson,Student,HOLMES-1,17
+Mycroft Holmes,Faculty,WATSON-X,13
